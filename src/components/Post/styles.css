@@ -1,0 +1,39 @@
+.post{
+    box-shadow: 0 0 10px #fcfdff;
+    background-color: #ffffff;
+    display:block;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    transition: all 300ms ease-in-out;
+    cursor: pointer;
+    padding: 1rem;
+  }
+
+  @media screen and (min-width: 1000px) {
+    .post {
+      min-height: 36rem;
+      max-height: 36rem;
+    }
+  }
+  
+  .post-card{
+    padding: 1rem;
+  
+  }
+  
+  .post img{
+    max-width: 100%;
+    border-radius: 20px;
+    transition: all 300ms ease-in-out;
+  
+  }
+  .post img:hover{
+    box-shadow: 0 0 10px #1563ff;
+  
+  }
+  
+  .post:hover{
+    box-shadow: 0 0 10px #000000;
+  
+  }

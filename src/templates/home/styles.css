@@ -1,0 +1,33 @@
+.posts{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  
+
+}
+
+.container{
+  min-height: 100vh;
+  background-color: rgb(218, 203, 203);
+  padding: 4rem;
+  width: 60%;
+  justify-content: center;
+}
+
+.align-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.align-buttons button{
+  margin: 2rem;
+}
+#root{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
