@@ -1,88 +1,81 @@
 import './styles.css';
-import { Component } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Posts } from '../../components/Posts';
 import { loadPosts } from '../../utils/load-posts';
 import { GoButton } from '../../components/GoButton';
 import { BackButton } from '../../components/BackButton';
 import { Input } from '../../components/Input';
 
-class Home extends Component {
-  state = {oldCounter: 0, counter: 4, posts: [], allPosts: [], searchValue : ''};
+export const Home = () => {
+  const [posts, setPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
+  const [oldCounter, setOldCounter] = useState(0);
+  const [counter, setCounter] = useState(4);
+  const [searchValue, setSearchValue] = useState('');
 
-  async componentDidMount() {
-    const postsAndPhotos = await loadPosts(this);
-    const { oldCounter, counter } = this.state;
+  const noMorePosts = counter + 4 >= allPosts.length;
 
-    this.setState({ posts: postsAndPhotos.slice(oldCounter, counter), allPosts: postsAndPhotos });
-  }
+  const filteredPosts = !!searchValue ?
+    allPosts.filter(post => post.title.toLowerCase().includes(searchValue.toLowerCase()))
+    : posts;
 
-  handleClickBack = () => {
-    const { counter, oldCounter } = this.state;
+
+  const handleLoadPosts = useCallback (async (oldCounter, counter) => {
+    const postsAndPhotos = await loadPosts();
+    setPosts(postsAndPhotos.slice(oldCounter, counter));
+    setAllPosts(postsAndPhotos);
+  }, []);
+    
+
+  useEffect(() => {
+    handleLoadPosts(oldCounter, counter);
+  }, [handleLoadPosts, oldCounter, counter]);
   
-    if (oldCounter <=0) {
+
+  const handleClickBack = () => {
+    if (oldCounter <= 0) {
       return;
     }
-  
     const newCounter = Math.max(counter - 4, 0);
     const counterBack = Math.max(counter - 8, 0);
-  
-    this.setState({ oldCounter: counterBack, counter: newCounter }, () => {
-      this.componentDidMount();
-    });
-  
+    setCounter(newCounter);
+    setOldCounter(counterBack);
+    handleLoadPosts();
     console.log(counterBack, newCounter);
   };
-  
-  handleClickGo = () => {
-    const { counter, allPosts } = this.state;
-    const newCounter = Math.min(counter + 4, allPosts.length);
 
+  const handleClickGo = () => {
+    const newCounter = Math.min(counter + 4, allPosts.length);
     if (newCounter !== counter) {
-      this.setState({ oldCounter: counter, counter: newCounter }, () => {
-        this.componentDidMount();
-      });
-      console.log(counter, newCounter)
+      setOldCounter(counter);
+      setCounter(newCounter);
+      handleLoadPosts();
+      console.log(counter, newCounter);
     }
   };
 
-  handleChange = (e) => {
+  const handleChange = (e) => {
     const { value } = e.target;
-    this.setState({ searchValue: value });
-  }
+    setSearchValue(value);
+  };
 
-  render() {
-    const { posts, counter, allPosts, searchValue } = this.state;
-    const noMorePosts = counter + 4 >= allPosts.length;
-    const filteredPosts = !!searchValue ?
-      allPosts.filter(post => {
-        return post.title.toLowerCase().includes(
-          searchValue.toLowerCase()
-        );
-      })
-      : posts;
-    return (
-      
-      <section className='container'>
-        {!!searchValue && (
-          <>
-            <h1>Search Value: {searchValue}</h1>
-          </>
-        )}
-        <Input searchValue={searchValue} handleChange={this.handleChange}/>
-        <Posts posts={filteredPosts}/>
-          <h1>Page: {counter/4}/25</h1>
+  return (
+    <section className='container'>
+      {!!searchValue && (
+        <>
+          <h1>Search Value: {searchValue}</h1>
+        </>
+      )}
+      <Input searchValue={searchValue} handleChange={handleChange} />
+      <Posts posts={filteredPosts} />
+      <h1>Page: {counter / 4}/25</h1>
 
-          <div className='align-buttons'>
-            <BackButton onClick={this.handleClickBack} disable={noMorePosts}/>
-            <GoButton onClick={this.handleClickGo} disable={noMorePosts} />
-        </div>
-
-       
-
-        
-      </section>
-    );
-  }
-}
+      <div className='align-buttons'>
+        <BackButton onClick={handleClickBack} disable={noMorePosts} />
+        <GoButton onClick={handleClickGo} disable={noMorePosts} />
+      </div>
+    </section>
+  );
+};
 
 export default Home;
