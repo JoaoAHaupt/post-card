@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Input/> should match snapshot 1`] = `
+<div>
+  <div
+    class="text-input"
+  >
+    <input
+      placeholder="type your search"
+      type="search"
+      value=""
+    />
+  </div>
+</div>
+`;

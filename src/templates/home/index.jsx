@@ -2,8 +2,8 @@ import './styles.css';
 import { useCallback, useEffect, useState } from 'react';
 import { Posts } from '../../components/Posts';
 import { loadPosts } from '../../utils/load-posts';
-import { GoButton } from '../../components/GoButton';
-import { BackButton } from '../../components/BackButton';
+import { GoButton } from '../../components/Buttons/GoButton/index';
+import { BackButton } from '../../components/Buttons/BackButton/index';
 import { Input } from '../../components/Input';
 
 export const Home = () => {
@@ -17,7 +17,7 @@ export const Home = () => {
 
   const filteredPosts = !!searchValue ?
     allPosts.filter(post => post.title.toLowerCase().includes(searchValue.toLowerCase()))
-    : posts;
+  : posts;
 
 
   const handleLoadPosts = useCallback (async (oldCounter, counter) => {
@@ -63,7 +63,7 @@ export const Home = () => {
     <section className='container'>
       {!!searchValue && (
         <>
-          <h1>Search Value: {searchValue}</h1>
+          <h1>Search Va ue: {searchValue}</h1>
         </>
       )}
       <Input searchValue={searchValue} handleChange={handleChange} />
@@ -71,8 +71,8 @@ export const Home = () => {
       <h1>Page: {counter / 4}/25</h1>
 
       <div className='align-buttons'>
-        <BackButton onClick={handleClickBack} disable={noMorePosts} />
-        <GoButton onClick={handleClickGo} disable={noMorePosts} />
+        <BackButton text="Come back pages" onClick={handleClickBack} disable={noMorePosts} />
+        <GoButton text="Load more pages" onClick={handleClickGo} disable={noMorePosts} />
       </div>
     </section>
   );
